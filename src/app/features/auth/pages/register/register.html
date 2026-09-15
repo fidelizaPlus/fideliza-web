@@ -1,0 +1,103 @@
+<main>
+  <section>
+    <header>
+      <h1>Criar uma conta</h1>
+      <p>Crie sua conta para continuar.</p>
+    </header>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label for="establishmentName">Nome do Estabelecimento</label>
+        <input
+          type="text"
+          name="establishmentName"
+          id="establishmentName"
+          formControlName="establishmentName"
+        />
+        @if (
+          registerForm.controls.establishmentName.touched &&
+          registerForm.controls.establishmentName.hasError('required')
+        ) {
+          <span>O nome do estabelecimento é obrigatório</span>
+        } @else if (
+          registerForm.controls.establishmentName.touched &&
+          registerForm.controls.establishmentName.hasError('pattern')
+        ) {
+          <span>Digite um nome válido</span>
+        }
+      </div>
+
+      <div>
+        <label for="email">E-mail</label>
+        <input type="email" name="email" id="email" formControlName="email" />
+        @if (
+          registerForm.controls.email.touched && registerForm.controls.email.hasError('required')
+        ) {
+          <span>O e-mail é obrigatório</span>
+        } @else if (
+          registerForm.controls.email.touched && registerForm.controls.email.hasError('email')
+        ) {
+          <span>Digite um e-mail válido</span>
+        }
+      </div>
+
+      <div>
+        <label for="cnpj">CNPJ</label>
+        <input type="text" name="cnpj" id="cnpj" formControlName="cnpj" />
+        @if (
+          registerForm.controls.cnpj.touched && registerForm.controls.cnpj.hasError('required')
+        ) {
+          <span>O CNPJ é obrigatório</span>
+        } @else if (
+          registerForm.controls.cnpj.touched && registerForm.controls.cnpj.hasError('invalidCnpj')
+        ) {
+          <span>Digite um CNPJ válido</span>
+        }
+      </div>
+
+      <div>
+        <label for="password">Senha</label>
+        <input type="password" name="password" id="password" formControlName="password" />
+
+        @if (registerForm.controls.password.touched) {
+          @if (registerForm.controls.password.hasError('required')) {
+            <span>A senha é obrigatória</span>
+          } @else if (registerForm.controls.password.hasError('minlength')) {
+            <span>A senha deve ter pelo menos 6 caracteres</span>
+          }
+        }
+      </div>
+
+      <div>
+        <label for="confirmPassword">Confirmar senha</label>
+        <input
+          type="password"
+          name="confirmPassword"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+        />
+
+        @if (registerForm.controls.confirmPassword.touched) {
+          @if (registerForm.controls.confirmPassword.hasError('required')) {
+            <span>Confirme sua senha</span>
+          } @else if (registerForm.controls.confirmPassword.hasError('minlength')) {
+            <span>A confirmação deve ter pelo menos 6 caracteres</span>
+          } @else if (registerForm.hasError('passwordMismatch')) {
+            <span>As senhas não coincidem</span>
+          }
+        }
+      </div>
+
+      <div>
+        <label for="terms">Termos de Uso</label>
+        <input type="checkbox" name="terms" id="terms" formControlName="terms" />
+        @if (
+          registerForm.controls.terms.touched && registerForm.controls.terms.hasError('required')
+        ) {
+          <span>Você precisa aceitar os termos de uso</span>
+        }
+      </div>
+
+      <button type="submit">Criar conta</button>
+    </form>
+  </section>
+</main>
