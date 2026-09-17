@@ -1,103 +1,354 @@
-<main>
-  <section>
-    <header>
-      <h1>Criar uma conta</h1>
-      <p>Crie sua conta para continuar.</p>
+<main [class]="main()">
+  <section [class]="presentationSection()">
+    <header [class]="headerPresentation()">
+      <img src="#" alt="logo" />
+
+      <div class="flex flex-col gap-4">
+        <h1 [class]="h1Text()" class="text-white">
+          Fidelize quem já escolheu
+          <br />
+          seu restaurante.
+        </h1>
+
+        <h2 [class]="h2TextPresentation()">
+          Retenção, reativação e programa de pontos em um único painel direto ao ponto.
+        </h2>
+      </div>
     </header>
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <div>
-        <label for="establishmentName">Nome do Estabelecimento</label>
-        <input
-          type="text"
-          name="establishmentName"
-          id="establishmentName"
-          formControlName="establishmentName"
-        />
-        @if (
-          registerForm.controls.establishmentName.touched &&
-          registerForm.controls.establishmentName.hasError('required')
-        ) {
-          <span>O nome do estabelecimento é obrigatório</span>
-        } @else if (
-          registerForm.controls.establishmentName.touched &&
-          registerForm.controls.establishmentName.hasError('pattern')
-        ) {
-          <span>Digite um nome válido</span>
+
+    <ul class="flex flex-col gap-4 mt-15">
+      <li class="flex flex-row gap-3">
+        <span
+          aria-hidden="true"
+          class="bg-(--white-12) text-white w-6.5 h-6.5 rounded-md flex justify-center items-center mt-px"
+        >
+          <i class="pi pi-check text-[12px]"></i>
+        </span>
+
+        <div>
+          <strong class="text-[13px] text-(--white-95) font-semibold"
+            >Detecte clientes em risco</strong
+          >
+          <p class="text-xs text-(--white-65) font-normal mt-px">
+            Saiba quem está sumindo antes de perder de vez.
+          </p>
+        </div>
+      </li>
+
+      <li class="flex flex-row gap-3">
+        <span
+          aria-hidden="true"
+          class="bg-(--white-12) text-white w-6.5 h-6.5 rounded-md flex justify-center items-center mt-px"
+        >
+          <i class="pi pi-check text-[12px]"></i>
+        </span>
+
+        <div>
+          <strong class="text-[13px] text-(--white-95) font-semibold"
+            >Campanhas em poucos cliques</strong
+          >
+          <p class="text-xs text-(--white-65) font-normal mt-px">
+            WhatsApp, e-mail — sem equipe técnica.
+          </p>
+        </div>
+      </li>
+
+      <li class="flex flex-row gap-3">
+        <span
+          aria-hidden="true"
+          class="bg-(--white-12) text-white w-6.5 h-6.5 rounded-md flex justify-center items-center mt-px"
+        >
+          <i class="pi pi-check text-[12px]"></i>
+        </span>
+
+        <div>
+          <strong class="text-[13px] text-(--white-95) font-semibold"
+            >Programa de pontos real</strong
+          >
+          <p class="text-xs text-(--white-65) font-normal mt-px">
+            Recompensas que fazem o cliente querer voltar.
+          </p>
+        </div>
+      </li>
+    </ul>
+
+    <!-- TODO: criar link para voltar ao site de apresentação -->
+  </section>
+
+  <section [class]="formSection()">
+    <div [class]="formContainer()">
+      <header>
+        <h1 [class]="h1Text()">Criar uma conta</h1>
+
+        <p [class]="pText()">Preencha os dados do seu estabelecimento</p>
+      </header>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <!-- Barra de progresso -->
+        <div class="flex gap-1.5 mb-5.5">
+          <div
+            [class]="
+              stepProgress({
+                active: true,
+              })
+            "
+          ></div>
+
+          <div
+            [class]="
+              stepProgress({
+                active: step === 2,
+              })
+            "
+          ></div>
+        </div>
+
+        <!-- PASSO 1 -->
+        @if (step === 1) {
+          <fieldset [class]="formFields()">
+            <legend [class]="legendText()">Passo 1 de 2 - Estabelecimento</legend>
+
+            <div>
+              <label for="establishmentName"> Nome do Estabelecimento </label>
+
+              <div class="relative">
+                <i
+                  class="pi pi-building absolute left-3.5 top-1/2 -translate-y-1/2 text-[14px] text-(--helper-text)"
+                ></i>
+
+                <input
+                  pInputText
+                  [class]="formInput({ withIcon: true })"
+                  type="text"
+                  id="establishmentName"
+                  formControlName="establishmentName"
+                  placeholder="Ex: Restaurante Aura"
+                />
+              </div>
+
+              @if (
+                registerForm.controls.establishmentName.touched &&
+                registerForm.controls.establishmentName.hasError('required')
+              ) {
+                <span class="flex items-center gap-1 text-xs text-(--error-text)">
+                  <i class="pi pi-exclamation-circle text-[10px]"></i>
+                  O nome do estabelecimento é obrigatório
+                </span>
+              } @else if (
+                registerForm.controls.establishmentName.touched &&
+                registerForm.controls.establishmentName.hasError('pattern')
+              ) {
+                <span class="flex items-center gap-1 text-xs text-(--error-text)">
+                  <i class="pi pi-exclamation-circle text-[10px]"></i>
+                  Digite um nome válido
+                </span>
+              }
+            </div>
+
+            <div>
+              <label for="email"> E-mail </label>
+              <div class="relative">
+                <i
+                  class="pi pi-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-[14px] text-(--helper-text) z-10 pointer-events-none"
+                ></i>
+
+                <input
+                  pInputText
+                  [class]="formInput({ withIcon: true })"
+                  type="email"
+                  name="email"
+                  id="email"
+                  formControlName="email"
+                  placeholder="aura@email.com"
+                />
+              </div>
+
+              @if (
+                registerForm.controls.email.touched &&
+                registerForm.controls.email.hasError('required')
+              ) {
+                <span class="flex items-center gap-1 text-xs text-(--error-text)">
+                  <i class="pi pi-exclamation-circle text-[10px]"></i>
+                  O e-mail é obrigatório
+                </span>
+              } @else if (
+                registerForm.controls.email.touched && registerForm.controls.email.hasError('email')
+              ) {
+                <span class="flex items-center gap-1 text-xs text-(--error-text)">
+                  <i class="pi pi-exclamation-circle text-[10px]"></i>
+                  Digite um e-mail válido
+                </span>
+              }
+            </div>
+
+            <div>
+              <label for="cnpj"> CNPJ </label>
+
+              <div class="relative">
+                <i
+                  class="pi pi-id-card absolute left-3.5 top-1/2 -translate-y-1/2 text-[14px] text-(--helper-text)"
+                ></i>
+
+                <input
+                  pInputText
+                  [class]="formInput({ withIcon: true })"
+                  type="text"
+                  id="cnpj"
+                  formControlName="cnpj"
+                  placeholder="00.000.000/0001-00"
+                />
+              </div>
+
+              @if (
+                registerForm.controls.cnpj.touched &&
+                registerForm.controls.cnpj.hasError('required')
+              ) {
+                <span class="flex items-center gap-1 text-xs text-(--error-text)">
+                  <i class="pi pi-exclamation-circle text-[10px]"></i>
+                  O CNPJ é obrigatório
+                </span>
+              } @else if (
+                registerForm.controls.cnpj.touched &&
+                registerForm.controls.cnpj.hasError('invalidCnpj')
+              ) {
+                <span class="flex items-center gap-1 text-xs text-(--error-text)">
+                  <i class="pi pi-exclamation-circle text-[10px]"></i>
+                  Digite um CNPJ válido
+                </span>
+              }
+            </div>
+
+            <button pButton [class]="button()" type="button" (click)="onContinue()">
+              <i class="pi pi-arrow-right"></i>
+              <span pButtonLabel [class]="buttonSpan()"> Continuar </span>
+            </button>
+          </fieldset>
         }
-      </div>
 
-      <div>
-        <label for="email">E-mail</label>
-        <input type="email" name="email" id="email" formControlName="email" />
-        @if (
-          registerForm.controls.email.touched && registerForm.controls.email.hasError('required')
-        ) {
-          <span>O e-mail é obrigatório</span>
-        } @else if (
-          registerForm.controls.email.touched && registerForm.controls.email.hasError('email')
-        ) {
-          <span>Digite um e-mail válido</span>
+        <!-- PASSO 2 -->
+        @if (step === 2) {
+          <fieldset [class]="formFields()">
+            <legend [class]="legendText()">Passo 2 de 2 - Acesso</legend>
+
+            <div>
+              <label for="password"> Senha </label>
+
+              <div class="relative">
+                <i
+                  class="pi pi-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-[14px] text-(--helper-text)"
+                ></i>
+
+                <input
+                  pInputText
+                  [class]="formInput({ withIcon: true })"
+                  type="password"
+                  id="password"
+                  formControlName="password"
+                  placeholder="Mínimo 6 caracteres"
+                />
+              </div>
+
+              @if (registerForm.controls.password.touched) {
+                @if (registerForm.controls.password.hasError('required')) {
+                  <span class="flex items-center gap-1 text-xs text-(--error-text)">
+                    <i class="pi pi-exclamation-circle text-[10px]"></i>
+                    A senha é obrigatória
+                  </span>
+                } @else if (registerForm.controls.password.hasError('minlength')) {
+                  <span class="flex items-center gap-1 text-xs text-(--error-text)">
+                    <i class="pi pi-exclamation-circle text-[10px]"></i>
+                    A senha deve ter pelo menos 6 caracteres
+                  </span>
+                }
+              }
+            </div>
+
+            <div>
+              <label for="confirmPassword"> Confirmar senha </label>
+
+              <div class="relative">
+                <i
+                  class="pi pi-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-[14px] text-(--helper-text)"
+                ></i>
+
+                <input
+                  pInputText
+                  [class]="formInput({ withIcon: true })"
+                  type="password"
+                  id="confirmPassword"
+                  formControlName="confirmPassword"
+                  placeholder="Repita a senha"
+                />
+              </div>
+
+              @if (registerForm.controls.confirmPassword.touched) {
+                @if (registerForm.controls.confirmPassword.hasError('required')) {
+                  <span class="flex items-center gap-1 text-xs text-(--error-text)">
+                    <i class="pi pi-exclamation-circle text-[10px]"></i>
+                    Confirme seu senha
+                  </span>
+                } @else if (registerForm.controls.confirmPassword.hasError('minlength')) {
+                  <span> A confirmação deve ter pelo menos 6 caracteres </span>
+                } @else if (registerForm.hasError('passwordMismatch')) {
+                  <span class="flex items-center gap-1 text-xs text-(--error-text)">
+                    <i class="pi pi-exclamation-circle text-[10px]"></i>
+                    As senha não coincidem
+                  </span>
+                }
+              }
+            </div>
+
+            <div [class]="termsContainer()">
+              <div [class]="termsRow()">
+                <label for="terms" [class]="checkboxWrapper()">
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    formControlName="terms"
+                    [class]="termsCheckbox()"
+                  />
+
+                  <i [class]="checkboxIcon()"></i>
+                </label>
+
+                <label for="terms" [class]="termsText()">
+                  Li e concordo com os
+
+                  <a href="#" [class]="termsLink()"> Termos de Uso </a>
+
+                  e a
+
+                  <a href="#" [class]="termsLink()"> Política de Privacidade </a>
+                </label>
+              </div>
+
+              @if (
+                registerForm.controls.terms.touched &&
+                registerForm.controls.terms.hasError('required')
+              ) {
+                <span [class]="errorText()">
+                  <i [class]="errorIcon()"></i>
+                  Você precisa aceitar os termos de uso
+                </span>
+              }
+            </div>
+
+            <div class="flex gap-2">
+              <button pButton [class]="comeBackButton()" type="button" (click)="onComeBack()">
+                <span pButtonLabel class="flex gap-1 text-xs bg-(--brand)">
+                  <i class="pi pi-chevron-left text-[11px]"></i>
+                </span>
+              </button>
+
+              <button pButton [class]="button()" type="submit">
+                <i class="pi pi-user-plus text-[13px]"></i>
+
+                <span pButtonLabel> Criar conta </span>
+              </button>
+            </div>
+          </fieldset>
         }
-      </div>
-
-      <div>
-        <label for="cnpj">CNPJ</label>
-        <input type="text" name="cnpj" id="cnpj" formControlName="cnpj" />
-        @if (
-          registerForm.controls.cnpj.touched && registerForm.controls.cnpj.hasError('required')
-        ) {
-          <span>O CNPJ é obrigatório</span>
-        } @else if (
-          registerForm.controls.cnpj.touched && registerForm.controls.cnpj.hasError('invalidCnpj')
-        ) {
-          <span>Digite um CNPJ válido</span>
-        }
-      </div>
-
-      <div>
-        <label for="password">Senha</label>
-        <input type="password" name="password" id="password" formControlName="password" />
-
-        @if (registerForm.controls.password.touched) {
-          @if (registerForm.controls.password.hasError('required')) {
-            <span>A senha é obrigatória</span>
-          } @else if (registerForm.controls.password.hasError('minlength')) {
-            <span>A senha deve ter pelo menos 6 caracteres</span>
-          }
-        }
-      </div>
-
-      <div>
-        <label for="confirmPassword">Confirmar senha</label>
-        <input
-          type="password"
-          name="confirmPassword"
-          id="confirmPassword"
-          formControlName="confirmPassword"
-        />
-
-        @if (registerForm.controls.confirmPassword.touched) {
-          @if (registerForm.controls.confirmPassword.hasError('required')) {
-            <span>Confirme sua senha</span>
-          } @else if (registerForm.controls.confirmPassword.hasError('minlength')) {
-            <span>A confirmação deve ter pelo menos 6 caracteres</span>
-          } @else if (registerForm.hasError('passwordMismatch')) {
-            <span>As senhas não coincidem</span>
-          }
-        }
-      </div>
-
-      <div>
-        <label for="terms">Termos de Uso</label>
-        <input type="checkbox" name="terms" id="terms" formControlName="terms" />
-        @if (
-          registerForm.controls.terms.touched && registerForm.controls.terms.hasError('required')
-        ) {
-          <span>Você precisa aceitar os termos de uso</span>
-        }
-      </div>
-
-      <button type="submit">Criar conta</button>
-    </form>
+      </form>
+    </div>
   </section>
 </main>
