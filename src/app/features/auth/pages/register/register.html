@@ -288,7 +288,10 @@
                     Confirme seu senha
                   </span>
                 } @else if (registerForm.controls.confirmPassword.hasError('minlength')) {
-                  <span> A confirmação deve ter pelo menos 6 caracteres </span>
+                  <span class="flex items-center gap-1 text-xs text-(--error-text)">
+                    <i class="pi pi-exclamation-circle text-[10px]"></i>
+                    A confirmação deve ter pelo menos 6 caracteres
+                  </span>
                 } @else if (registerForm.hasError('passwordMismatch')) {
                   <span class="flex items-center gap-1 text-xs text-(--error-text)">
                     <i class="pi pi-exclamation-circle text-[10px]"></i>
